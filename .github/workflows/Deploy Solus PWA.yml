@@ -1,0 +1,39 @@
+name: Deploy Solus PWA
+
+# Trigger the workflow on push to the main branch
+on:
+  push:
+    branches: [ "main" ]
+
+# Permissions required for GitHub Pages deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  # The type of runner that the job will run on
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE
+      - name: Checkout Code (Order)
+        uses: actions/checkout@v4
+
+      # 1. Setup GitHub Pages Environment
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      # 2. Upload Artifact (PWA Files)
+      # This action prepares the index.html, sw.js, and manifest_solus.webmanifest 
+      # from the root directory for deployment.
+      - name: Upload PWA Artifact (Transformation)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './' # The root directory contains all PWA files
+
+      # 3. Deploy to GitHub Pages (Final Reconstruction)
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
