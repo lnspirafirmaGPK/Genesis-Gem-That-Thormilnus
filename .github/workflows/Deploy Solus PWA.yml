@@ -5,7 +5,7 @@ on:
   push:
     branches: [ "main" ]
 
-# Permissions required for GitHub Pages deployment
+# Permissions required for GitHub Pages deployment and Gemini CLI authentication
 permissions:
   contents: read
   pages: write
@@ -26,8 +26,6 @@ jobs:
         uses: actions/configure-pages@v4
 
       # 2. Upload Artifact (PWA Files)
-      # This action prepares the index.html, sw.js, and manifest_solus.webmanifest 
-      # from the root directory for deployment.
       - name: Upload PWA Artifact (Transformation)
         uses: actions/upload-pages-artifact@v3
         with:
@@ -37,3 +35,15 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+    # 4. Run Gemini CLI (Intelligence Layer)
+      # ตรวจสอบความเรียบร้อยหรือสร้างรายงานหลังการ Deploy
+      - name: Run Gemini CLI
+        uses: google-github-actions/run-gemini-cli@v0.1.14
+        with:
+          # --- แก้ไขบรรทัดนี้ ---
+          # ต้องอ้างอิง "ชื่อ" ของ Secret เท่านั้น ไม่ใช่ "ค่า" ของ Secret
+          gemini_api_key: ${{ secrets.GEMINI_API_KEY }} 
+          # ----------------------
+          prompt: "Review the deployment status and summarize the PWA configuration files (manifest_solus.webmanifest, sw.js)."
+          
