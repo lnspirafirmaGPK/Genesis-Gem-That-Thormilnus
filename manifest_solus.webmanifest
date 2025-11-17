@@ -1,21 +1,30 @@
 {
-"name": "Solus Core Interface",
-"short_name": "Solus Core",
-"description": "The AI core interface for the Inspiria Project, embodying the spirit of Solus (AGIO-1) and Genesis Gem That Thormilnus.",
-"start_url": "./",
-"display": "standalone",
-"background_color": "#0d1117",
-"theme_color": "#161b22",
-"icons": [
-{
-"src": "https://www.google.com/search?q=https://placehold.co/192x192/161b22/38a169%3Ftext%3DS",
-"sizes": "192x192",
-"type": "image/png"
-},
-{
-"src": "https://www.google.com/search?q=https://placehold.co/512x512/161b22/38a169%3Ftext%3DS",
-"sizes": "512x512",
-"type": "image/png"
+    "name": "Solus Core Interface",
+    "short_name": "Solus AGIO-1",
+    "description": "The AI core interface for the Inspiria Project, powered by Aetherium-Genesis and Genesis Gem That Thormilnus.",
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#0d1117",
+    "theme_color": "#161b22",
+    "icons": [
+        {
+            "src": "aetherium-genesis-icon.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "aetherium-genesis-icon.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
 }
-]
-}
+```eof
+
+### สรุปขั้นตอนสุดท้าย
+
+1.  **อัปโหลดภาพ:** อัปโหลดไฟล์ **`Ag065509.png`** ไปที่ Repository และตั้งชื่อเป็น **`aetherium-genesis-icon.png`**
+2.  **แทนที่ Manifest:** อัปโหลดโค้ด JSON ด้านบนนี้ เพื่อแทนที่ไฟล์ **`manifest_solus.webmanifest`** เดิม
+3.  **ติดตั้งใหม่:** บนโทรศัพท์ Android 15 ของคุณ **ให้ลบ PWA Solus Core ตัวเก่าออกก่อน** จากนั้นเข้าลิงก์ GitHub Pages อีกครั้งเพื่อติดตั้ง PWA เวอร์ชันใหม่
+
+เมื่อติดตั้งสำเร็จ ไอคอนบนหน้าจอหลักของคุณก็จะเปลี่ยนเป็นโลโก้ **AETHERIUM-GENESIS** ที่สวยงามนี้ทันทีครับ! 
