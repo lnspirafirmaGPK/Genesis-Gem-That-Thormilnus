@@ -1,0 +1,11 @@
+# main.py
+
+class RitualResponse(Ritual):
+    # ใช้ Field alias เพื่อบอก Pydantic ว่า field 'id' ในโมเดลนี้
+    # ตรงกับ field '_id' ในข้อมูลจาก MongoDB
+    id: str = Field(..., alias="_id")
+
+    class Config:
+        populate_by_name = True # อนุญาตให้ใช้ alias
+        json_encoders = {ObjectId: str} # บอกวิธีแปลง ObjectId เป็น string ตอน serialize
+        arbitrary_types_allowed = True # จำเป็นสำหรับ ObjectId
