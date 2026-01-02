@@ -1,11 +1,42 @@
-# main.py
+from pydantic import BaseModel, Field, BeforeValidator, ConfigDict
+from typing import Annotated, Optional
+from bson import ObjectId
 
-class RitualResponse(Ritual):
-    # ใช้ Field alias เพื่อบอก Pydantic ว่า field 'id' ในโมเดลนี้
-    # ตรงกับ field '_id' ในข้อมูลจาก MongoDB
-    id: str = Field(..., alias="_id")
+# 1. สร้าง Type สำหรับจัดการ ObjectId โดยเฉพาะ
+# จะแปลง ObjectId เป็น string ให้อัตโนมัติก่อนเข้า Model
+PyObjectId = Annotated[str, BeforeValidator(str)]
 
-    class Config:
-        populate_by_name = True # อนุญาตให้ใช้ alias
-        json_encoders = {ObjectId: str} # บอกวิธีแปลง ObjectId เป็น string ตอน serialize
-        arbitrary_types_allowed = True # จำเป็นสำหรับ ObjectId
+class RitualBase(BaseModel):
+    """โมเดลพื้นฐานสำหรับข้อมูล Ritual"""
+    name: str
+    description: Optional[str] = None
+    power_level: int = 1
+    # เพิ่ม field อื่นๆ ตามที่คุณใช้งาน
+
+class RitualResponse(RitualBase):
+    """โมเดลสำหรับส่งข้อมูลกลับ (Response) พร้อมจัดการ ID จาก MongoDB"""
+    
+    # ใช้ alias="_id" เพื่อแมปกับฟิลด์ของ MongoDB
+    id: Optional[PyObjectId] = Field(alias="_id", default=None)
+
+    # การตั้งค่าคอนฟิกแบบ Pydantic V2
+    model_config = ConfigDict(
+        # ยอมรับทั้งชื่อ 'id' และ '_id'
+        populate_by_name=True,
+        # อนุญาตให้ใช้ชนิดข้อมูลแปลกๆ (เช่น ObjectId)
+        arbitrary_types_allowed=True,
+        # ตั้งค่าตอนแปลงเป็น JSON ให้จัดการ ObjectId เป็น string
+        json_schema_extra={
+            "example": {
+                "name": "Solar Invocation",
+                "description": "A ritual to harness sun power",
+                "power_level": 5
+            }
+        }
+    )
+
+# --- ตัวอย่างการใช้งานร่วมกับ FastAPI ---
+# @app.get("/rituals/{id}", response_model=RitualResponse)
+# async def get_ritual(id: str):
+#    ritual = await db.rituals.find_one({"_id": ObjectId(id)})
+#    return ritual
