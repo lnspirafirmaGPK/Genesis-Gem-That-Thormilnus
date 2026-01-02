@@ -23,15 +23,15 @@ jobs:
       - name: Upload PWA Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './' 
+          path: './' # ตรวจสอบให้แน่ใจว่าไฟล์ manifest และ sw.js อยู่ที่ root
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
 
-      # This must be indented inside the 'steps' list
+      # ย้าย Gemini CLI มาไว้ใน steps และเยื้องให้ตรงกัน
       - name: Run Gemini CLI (Intelligence Layer)
         uses: google-github-actions/run-gemini-cli@v0.1.14
         with:
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }} 
-          prompt: "Review the deployment status and summarize the PWA configuration files (manifest_solus.webmanifest, sw.js)."
+          prompt: "Review the deployment status and summarize the PWA configuration files (manifest_solus.webmanifest, sw.js). Check if they follow standard PWA requirements."
