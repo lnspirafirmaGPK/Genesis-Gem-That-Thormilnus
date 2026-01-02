@@ -1,37 +1,45 @@
 name: Deploy Solus PWA
 
+# Trigger the workflow on push to the main branch
 on:
   push:
     branches: [ "main" ]
 
+# Permissions required for GitHub Pages deployment and Gemini CLI authentication
 permissions:
   contents: read
   pages: write
   id-token: write
 
 jobs:
+  # The type of runner that the job will run on
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      # Checks-out your repository under $GITHUB_WORKSPACE
+      - name: Checkout Code (Order)
         uses: actions/checkout@v4
 
+      # 1. Setup GitHub Pages Environment
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
-      - name: Upload PWA Artifact
+      # 2. Upload Artifact (PWA Files)
+      - name: Upload PWA Artifact (Transformation)
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './' # ตรวจสอบให้แน่ใจว่าไฟล์ manifest และ sw.js อยู่ที่ root
+          path: './' # The root directory contains all PWA files
 
+      # 3. Deploy to GitHub Pages (Final Reconstruction)
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
 
-      # ย้าย Gemini CLI มาไว้ใน steps และเยื้องให้ตรงกัน
-      - name: Run Gemini CLI (Intelligence Layer)
+      # 4. Run Gemini CLI (Intelligence Layer)
+      # --- แก้ไขตรงนี้: ขยับการเยื้องให้เข้ามาอยู่ภายใต้ steps ---
+      - name: Run Gemini CLI
         uses: google-github-actions/run-gemini-cli@v0.1.14
         with:
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }} 
-          prompt: "Review the deployment status and summarize the PWA configuration files (manifest_solus.webmanifest, sw.js). Check if they follow standard PWA requirements."
+          prompt: "Review the deployment status and summarize the PWA configuration files (manifest_solus.webmanifest, sw.js)."
