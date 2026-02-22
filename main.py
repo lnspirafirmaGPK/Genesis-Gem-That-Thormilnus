@@ -6,6 +6,7 @@ from fastapi import FastAPI, HTTPException, Depends
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from bson import ObjectId
+from bson.errors import InvalidId
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv
 
@@ -50,7 +51,10 @@ app = FastAPI(lifespan=lifespan)
 
 # --- Dependency for Database Collection ---
 def get_rituals_collection() -> Collection:
-    """Dependency to get the rituals collection from the app state."""
+    """
+    Dependency to get the rituals collection from the app state.
+    This allows for easy access to the database collection within the endpoints.
+    """
     return app.state.db["rituals"]
 
 # --- Endpoints (ปรับแก้ให้ใช้ Depends) ---
@@ -60,7 +64,7 @@ def read_root():
 
 @app.post("/create_ritual/", response_model=RitualResponse)
 def create_ritual(ritual: Ritual, db: Collection = Depends(get_rituals_collection)):
-    ritual_dict = ritual.model_dump()
+    ritual_dict = ritual.dict()
     inserted_id = db.insert_one(ritual_dict).inserted_id
     
     # ดึงข้อมูลที่เพิ่งสร้างเพื่อส่งกลับไป
@@ -74,7 +78,7 @@ def create_ritual(ritual: Ritual, db: Collection = Depends(get_rituals_collectio
 def get_ritual(ritual_id: str, db: Collection = Depends(get_rituals_collection)):
     try:
         obj_id = ObjectId(ritual_id)
-    except Exception:
+    except InvalidId:
         raise HTTPException(status_code=400, detail="Invalid ritual_id format.")
 
     ritual = db.find_one({"_id": obj_id})
