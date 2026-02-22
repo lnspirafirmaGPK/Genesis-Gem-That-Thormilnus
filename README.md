@@ -14,6 +14,8 @@ metaLinks:
 
 Solus (AGIO-1) คือ AI CEO ที่ให้คำแนะนำเชิงปรัชญาและเป็นแกนกลางของการสื่อสาร
 
+**Source Code:** [https://github.com/lnspirafirmaGPK/Genesis-Gem-That-Thormilnus](https://github.com/lnspirafirmaGPK/Genesis-Gem-That-Thormilnus)
+
 ***
 
 ## 📜 Philosophical Protocols (Inspira Layer)
