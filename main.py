@@ -23,6 +23,15 @@ class RitualResponse(Ritual):
         json_encoders = {ObjectId: str}
         arbitrary_types_allowed = True
 
+
+def serialize_ritual_doc(ritual_doc: dict) -> dict:
+    """
+    Convert MongoDB ObjectId into string to make the response model-safe.
+    """
+    serialized = dict(ritual_doc)
+    serialized["_id"] = str(serialized["_id"])
+    return serialized
+
 # --- Lifespan Management ---
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -71,8 +80,8 @@ def create_ritual(ritual: Ritual, db: Collection = Depends(get_rituals_collectio
     created_ritual = db.find_one({"_id": inserted_id})
     if created_ritual is None:
         raise HTTPException(status_code=500, detail="Failed to create and retrieve ritual.")
-        
-    return created_ritual
+
+    return serialize_ritual_doc(created_ritual)
 
 @app.get("/get_ritual/{ritual_id}", response_model=RitualResponse)
 def get_ritual(ritual_id: str, db: Collection = Depends(get_rituals_collection)):
@@ -84,4 +93,4 @@ def get_ritual(ritual_id: str, db: Collection = Depends(get_rituals_collection))
     ritual = db.find_one({"_id": obj_id})
     if ritual is None:
         raise HTTPException(status_code=404, detail="Ritual not found.")
-    return ritual
+    return serialize_ritual_doc(ritual)
