@@ -39,7 +39,7 @@ jobs:
       # 4. Run Gemini CLI (Intelligence Layer)
       # --- แก้ไขตรงนี้: ขยับการเยื้องให้เข้ามาอยู่ภายใต้ steps ---
       - name: Run Gemini CLI
-        uses: google-github-actions/run-gemini-cli@v0.1.14
+        uses: google-github-actions/run-gemini-cli@v0.1.22
         with:
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }} 
           prompt: "Review the deployment status and summarize the PWA configuration files (manifest_solus.webmanifest, sw.js)."
